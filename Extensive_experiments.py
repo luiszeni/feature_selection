@@ -570,8 +570,8 @@ def main():
     standard_scaler = StandardScaler()
     xAll = standard_scaler.fit_transform(xAll)
    
-    runAllFeatureSelectors(xAll, yAll, "ex3/Base2_atributos_comuns", featureNames2)
-    
+    runAllFeatureSelectors(xAll, yAll, "ex3/DatasetsTogether", featureNames2)
+    '''
     #Experiment 4 - one dataset to train, one to test.
     xDb2, yDb2,featureNames2 =  loadDatabase('banco2.csv',[10,11,12])
     xDb3, yDb3,featureNames3 =  loadDatabase('banco3.csv',[10])
@@ -590,7 +590,7 @@ def main():
     xDb2 = standard_scaler.transform(xDb2) #dataset 2 is not used in the normalization
 
     runAllFeatureSelectorsTwoDatasets(xDb3, xDb2, yDb3, yDb2, "ex4/Base3_treino_vs_Base2_teste", featureNames2)
-
+    '''
 
 if __name__ == "__main__":
     main()

@@ -22,7 +22,7 @@ class ClassificationResults:
         self.acc_f_svm_rbf = np.zeros(( self.numberFeatures+1), dtype=float)
         self.acc_f_svm_sigmoid = np.zeros(( self.numberFeatures+1), dtype=float)
         self.acc_f_nn = np.zeros(( self.numberFeatures+1), dtype=float)
-        self.selectedFeatures = np.zeros(( self.numberFeatures+1), dtype='|S128')
+        self.selectedFeatures = np.zeros(( self.numberFeatures+1), dtype='|S256')
 
     
     def plotData(self):
@@ -379,7 +379,7 @@ def leaveOneOut(xDb,yDb,topFeatures,nF,results):
 
 def createResultsMatrix(results):
     
-    matrix = np.zeros((8, results.acc_f_knn.shape[0]), dtype='|S128')
+    matrix = np.zeros((8, results.acc_f_knn.shape[0]), dtype='|S256')
     
     matrix[0,0] = 'Features/Classifiers'
     matrix[0,1:] = results.selectedFeatures[1:]
@@ -415,7 +415,7 @@ def exportResults(name, results):
 
 def runAllFeatureSelectors(x, y, expName, featureNames):    
 
-    
+    '''
     cfs =  FeatureSelection(x,y, "cross_logisticregression")
     
     results = ClassificationResults(x)
@@ -439,7 +439,8 @@ def runAllFeatureSelectors(x, y, expName, featureNames):
         leaveOneOut(x, y,top,nF,results)
     
     exportResults(expName + "_cross_randomforest", results)    
-
+	'''
+    
     cfs =  FeatureSelection(x,y, "logisticregression")
     
     results = ClassificationResults(x)
@@ -470,7 +471,7 @@ def runAllFeatureSelectors(x, y, expName, featureNames):
     
 def runAllFeatureSelectorsTwoDatasets(xTrain,xVal, yTrain, yVal, expName, featureNames):    
 
-    
+    '''
     cfs =  FeatureSelection(xTrain,yTrain, "cross_logisticregression")
     
     results = ClassificationResults(xVal)
@@ -496,7 +497,7 @@ def runAllFeatureSelectorsTwoDatasets(xTrain,xVal, yTrain, yVal, expName, featur
         #leaveOneOut(xDb2,yDb2,top,nF,results)
     
     exportResults(expName + "_cross_randomforest", results)
-
+	'''
 
     cfs =  FeatureSelection(xTrain,yTrain, "logisticregression")
     
@@ -547,22 +548,22 @@ def main():
 
 
     #Experiment 2 - avaliate the datasets individually unsing only common features
-    xDb2, yDb2,featureNames2 =  loadDatabase('banco2.csv',[10,11,12])
+    xDb2, yDb2,featureNames2 =  loadDatabase('banco2.csv',[10,11])
     standard_scaler = StandardScaler()
     xDb2 = standard_scaler.fit_transform(xDb2)
 
     runAllFeatureSelectors(xDb2, yDb2, "ex2/Base2_atributos_comuns", featureNames2)
     
 
-    xDb3, yDb3,featureNames3 =  loadDatabase('banco3.csv',[10])
+    xDb3, yDb3,featureNames3 =  loadDatabase('banco3.csv',[])
     standard_scaler = StandardScaler()
     xDb3 = standard_scaler.fit_transform(xDb3)
     
     runAllFeatureSelectors(xDb3, yDb3, "ex2/Base3_atributos_comuns", featureNames3)
 
     #Experiment 3 - evaluate the datasets together
-    xDb2, yDb2,featureNames2 =  loadDatabase('banco2.csv',[10,11,12])
-    xDb3, yDb3,featureNames3 =  loadDatabase('banco3.csv',[10])
+    xDb2, yDb2,featureNames2 =  loadDatabase('banco2.csv',[10,11])
+    xDb3, yDb3,featureNames3 =  loadDatabase('banco3.csv',[])
     
     xAll = np.concatenate((xDb2,xDb3),axis=0);
     yAll = np.concatenate((yDb2,yDb3),axis=0);
@@ -571,10 +572,10 @@ def main():
     xAll = standard_scaler.fit_transform(xAll)
    
     runAllFeatureSelectors(xAll, yAll, "ex3/DatasetsTogether", featureNames2)
-    '''
+    
     #Experiment 4 - one dataset to train, one to test.
-    xDb2, yDb2,featureNames2 =  loadDatabase('banco2.csv',[10,11,12])
-    xDb3, yDb3,featureNames3 =  loadDatabase('banco3.csv',[10])
+    xDb2, yDb2,featureNames2 =  loadDatabase('banco2.csv',[10,11])
+    xDb3, yDb3,featureNames3 =  loadDatabase('banco3.csv',[])
 
     standard_scaler = StandardScaler()
     xDb2 = standard_scaler.fit_transform(xDb2)
@@ -582,15 +583,15 @@ def main():
 
     runAllFeatureSelectorsTwoDatasets(xDb2, xDb3, yDb2, yDb3, "ex4/Base2_treino_vs_Base3_teste", featureNames2)
 
-    xDb2, yDb2,featureNames2 =  loadDatabase('banco2.csv',[10,11,12])
-    xDb3, yDb3,featureNames3 =  loadDatabase('banco3.csv',[10])
+    xDb2, yDb2,featureNames2 =  loadDatabase('banco2.csv',[10,11])
+    xDb3, yDb3,featureNames3 =  loadDatabase('banco3.csv',[])
 
     standard_scaler = StandardScaler()
     xDb3 = standard_scaler.fit_transform(xDb3)
     xDb2 = standard_scaler.transform(xDb2) #dataset 2 is not used in the normalization
 
     runAllFeatureSelectorsTwoDatasets(xDb3, xDb2, yDb3, yDb2, "ex4/Base3_treino_vs_Base2_teste", featureNames2)
-    '''
+    
 
 if __name__ == "__main__":
     main()

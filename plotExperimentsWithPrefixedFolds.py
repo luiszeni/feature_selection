@@ -4,10 +4,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #Load the prefixed data from the folds
-results = np.load('/Users/zeni/Dropbox/2folds_50iterationsresults.nparray.npy')
-labels = np.load('/Users/zeni/Dropbox/2folds_50iterationsselectedFeatures.nparray.npy')
+results = np.load('results/10folds_50iterationsresults.nparray.npy')
+labels = np.load('results/10folds_50iterationsselectedFeatures.nparray.npy')
 
-foldsName = "2 folds 50 iterations"
+foldsName = "10 folds 50 iterations"
 
 numberOfFolds = results.shape[3]
 numerOfMethods= results.shape[1];
@@ -15,10 +15,10 @@ numberOfIterations = results.shape[2]
 numberOfRepetitionsForEach = results.shape[4]
 numeberOfFeatures = results.shape[0]
 
-
+'''
 mean = np.zeros((numeberOfFeatures, numerOfMethods, numberOfIterations ), dtype=float)
 std = np.zeros((numeberOfFeatures, numerOfMethods, numberOfIterations ), dtype=float)
-'''
+
 for nF in range(0,numeberOfFeatures):
     plt.figure()    
     for m in range (0, numerOfMethods):  
@@ -30,8 +30,9 @@ for nF in range(0,numeberOfFeatures):
             
     
         plt.errorbar(range(0,50), mean[nF,m,:],  std[nF,m,:], fmt='*')
-        plt.title("Simplest errorbars, 0.2 in x, 0.4 in y")
-    plt.show()
+        #plt.title("Simplest errorbars, 0.2 in x, 0.4 in y")
+    plt.savefig(str(nF) + ".jpg")
+#print results.shape
 '''
 mean = np.zeros((numeberOfFeatures, numerOfMethods ), dtype=float)
 std = np.zeros((numeberOfFeatures, numerOfMethods ), dtype=float)
